@@ -19,7 +19,7 @@ const TopicCreateForm = () => {
   return (
     <Popover placement="left">
       <PopoverTrigger>
-        <Button color="primary">Create a Topic</Button>
+        <Button color="primary">Create Topic</Button>
       </PopoverTrigger>
       <PopoverContent>
         <form action={action}>
