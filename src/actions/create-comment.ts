@@ -1,10 +1,10 @@
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
-import { auth } from "@/auth";
-import { db } from "@/db";
-import paths from "@/paths";
+import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
+import { auth } from '@/auth';
+import { db } from '@/db';
+import paths from '@/paths';
 
 const createCommentSchema = z.object({
   content: z.string().min(3),
@@ -18,13 +18,13 @@ interface CreateCommentFormState {
   success?: boolean;
 }
 
-export async function createComment(
+export const createComment = async (
   { postId, parentId }: { postId: string; parentId?: string },
   formState: CreateCommentFormState,
   formData: FormData
-): Promise<CreateCommentFormState> {
+): Promise<CreateCommentFormState> => {
   const result = createCommentSchema.safeParse({
-    content: formData.get("content"),
+    content: formData.get('content'),
   });
 
   if (!result.success) {
@@ -37,7 +37,7 @@ export async function createComment(
   if (!session || !session.user) {
     return {
       errors: {
-        _form: ["You must sign in to do this."],
+        _form: ['You must sign in to do this.'],
       },
     };
   }
@@ -61,7 +61,7 @@ export async function createComment(
     } else {
       return {
         errors: {
-          _form: ["Something went wrong..."],
+          _form: ['Something went wrong...'],
         },
       };
     }
@@ -74,7 +74,7 @@ export async function createComment(
   if (!topic) {
     return {
       errors: {
-        _form: ["Failed to revalidate topic"],
+        _form: ['Failed to revalidate topic'],
       },
     };
   }
@@ -84,4 +84,4 @@ export async function createComment(
     errors: {},
     success: true,
   };
-}
+};
