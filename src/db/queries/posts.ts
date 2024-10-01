@@ -36,3 +36,15 @@ export const fetchTopPosts = (): Promise<PostWithData[]> =>
     },
     take: 5,
   });
+
+export const fetchPostBySearchTerm = (term: string): Promise<PostWithData[]> =>
+  db.post.findMany({
+    where: {
+      OR: [{ title: { contains: term } }, { content: { contains: term } }],
+    },
+    include: {
+      topic: { select: { slug: true } },
+      user: { select: { name: true, image: true } },
+      _count: { select: { comments: true } },
+    },
+  });
