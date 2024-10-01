@@ -12,7 +12,7 @@ export type PostWithData = Post & {
 //   ReturnType<typeof fetchPostsByTopicSlug>
 // >[number];
 
-export const fetchPostsByTopicSlug = (slug: string) =>
+export const fetchPostsByTopicSlug = (slug: string): Promise<PostWithData[]> =>
   db.post.findMany({
     where: { topic: { slug } },
     include: {
@@ -20,4 +20,19 @@ export const fetchPostsByTopicSlug = (slug: string) =>
       user: { select: { name: true } },
       _count: { select: { comments: true } },
     },
+  });
+
+export const fetchTopPosts = (): Promise<PostWithData[]> =>
+  db.post.findMany({
+    orderBy: {
+      comments: {
+        _count: 'desc',
+      },
+    },
+    include: {
+      topic: { select: { slug: true } },
+      user: { select: { name: true } },
+      _count: { select: { comments: true } },
+    },
+    take: 5,
   });
